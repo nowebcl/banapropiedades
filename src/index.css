@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    background-color: #080e1b;
+    color: #e2e8f0;
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+  }
+}
+
+/* Propper Framed Style with Gold Accents */
+.framed {
+  border: 1.5px solid rgba(197, 160, 89, 0.45);
+  color: #dfb86c;
+  padding: 6px 14px;
+  display: inline-block;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+}
+
+@media (min-width: 640px) {
+  .framed {
+    padding: 8px 18px;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+  }
+}
+
+.framed-box {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(11, 20, 40, 0.75);
+}
+
+.framed-box:hover {
+  border-color: rgba(197, 160, 89, 0.5);
+}
+
+/* Propper Buttons in Gold */
+.btn-rounded {
+  border-radius: 50px;
+  padding: 10px 20px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .btn-rounded {
+    padding: 10px 24px;
+    font-size: 0.8rem;
+    gap: 8px;
+  }
+}
+
+.btn-primary-propper {
+  background: linear-gradient(135deg, #dfb86c 0%, #c5a059 100%);
+  color: #080e1b;
+  box-shadow: 0 4px 15px rgba(197, 160, 89, 0.25);
+}
+.btn-primary-propper:hover {
+  background: linear-gradient(135deg, #fae6be 0%, #dfb86c 100%);
+  color: #080e1b;
+  box-shadow: 0 6px 20px rgba(197, 160, 89, 0.4);
+}
+
+.btn-framed-propper {
+  border: 1.5px solid rgba(197, 160, 89, 0.4);
+  background: transparent;
+  color: #dfb86c;
+}
+.btn-framed-propper:hover {
+  border-color: #dfb86c;
+  color: #080e1b;
+  background: #dfb86c;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #080e1b;
+}
+::-webkit-scrollbar-thumb {
+  background: #15264a;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #c5a059;
+}
+
+/* Checkmarks list style with gold icon */
+.check-marks li {
+  position: relative;
+  padding-left: 28px;
+  margin-bottom: 12px;
+}
+.check-marks li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #dfb86c;
+  font-weight: bold;
+}

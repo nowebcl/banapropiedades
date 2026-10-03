@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Camera, TrendingUp, ShieldCheck, CheckCircle2, MessageCircle, Send, Home, Sparkles } from 'lucide-react';
 import { COMUNAS } from '../data/properties';
 
+import { sendContactMessage } from '../services/pocketbase';
+
 export const PublishWithUsView: React.FC = () => {
   const [form, setForm] = useState({
     name: '',
@@ -14,10 +16,26 @@ export const PublishWithUsView: React.FC = () => {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    try {
+      await sendContactMessage({
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        subject: `Captación: ${form.operation} de ${form.propertyType} en ${form.comuna}`,
+        message: form.message || `El cliente solicita captación y comercialización para su propiedad (${form.propertyType} en ${form.comuna}) en modalidad ${form.operation}.`,
+        source: 'publish_form',
+      });
+    } catch (err) {
+      console.error('Error submitting publish form:', err);
+    } finally {
+      setSubmitting(false);
+      setSubmitted(true);
+    }
   };
 
   const whatsappPublishMessage = encodeURIComponent(

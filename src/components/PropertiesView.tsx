@@ -10,12 +10,15 @@ interface PropertiesViewProps {
     propertyType?: string;
     comuna?: string;
   };
+  properties?: Property[];
 }
 
 export const PropertiesView: React.FC<PropertiesViewProps> = ({
   onSelectProperty,
   initialFilters,
+  properties,
 }) => {
+  const allProperties = properties && properties.length > 0 ? properties : PROPERTIES;
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedOperation, setSelectedOperation] = useState<string>(initialFilters?.operation || 'ALL');
   const [selectedType, setSelectedType] = useState<string>(initialFilters?.propertyType || 'Todos los tipos');
@@ -42,7 +45,7 @@ export const PropertiesView: React.FC<PropertiesViewProps> = ({
   };
 
   const filteredProperties = useMemo(() => {
-    return PROPERTIES.filter((item) => {
+    return allProperties.filter((item) => {
       // Search term
       if (searchTerm.trim() !== '') {
         const query = searchTerm.toLowerCase();
@@ -79,7 +82,7 @@ export const PropertiesView: React.FC<PropertiesViewProps> = ({
 
       return true;
     });
-  }, [searchTerm, selectedRegion, selectedOperation, selectedComuna, selectedCondition, selectedType]);
+  }, [allProperties, searchTerm, selectedRegion, selectedOperation, selectedComuna, selectedCondition, selectedType]);
 
   return (
     <div className="py-24 sm:py-28 bg-[#080e1b] min-h-screen">

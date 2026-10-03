@@ -11,25 +11,51 @@ import { FooterPropper } from './components/FooterPropper';
 import { PropertyDetailModal } from './components/PropertyDetailModal';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { MobileAppTabBar } from './components/MobileAppTabBar';
+import { AdminDashboard } from './components/admin/AdminDashboard';
 import { Property, PROPERTIES } from './data/properties';
+import { fetchProperties } from './services/pocketbase';
 
 export function App() {
+  const [properties, setProperties] = useState<Property[]>(PROPERTIES);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [currentView, setCurrentView] = useState<AppView>('home');
+  const [isAdminMode, setIsAdminMode] = useState<boolean>(false);
   const [searchFilters, setSearchFilters] = useState<{
     operation?: string;
     propertyType?: string;
     comuna?: string;
   }>({});
 
+  // Fetch dynamic properties from PocketBase
+  useEffect(() => {
+    const loadDynamicProperties = async () => {
+      try {
+        const liveProps = await fetchProperties();
+        if (liveProps && liveProps.length > 0) {
+          setProperties(liveProps);
+        }
+      } catch (err) {
+        console.warn('Using default properties fallback');
+      }
+    };
+    loadDynamicProperties();
+  }, []);
+
   // Sync state with URL hash
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash.toLowerCase();
 
+      // Secret Admin URL handler (#admin)
+      if (hash === '#admin' || hash.startsWith('#admin')) {
+        setIsAdminMode(true);
+        return;
+      }
+      setIsAdminMode(false);
+
       if (hash.startsWith('#propiedad-')) {
         const code = hash.replace('#propiedad-', '').toUpperCase();
-        const found = PROPERTIES.find((p) => p.code.toUpperCase() === code);
+        const found = properties.find((p) => p.code.toUpperCase() === code) || PROPERTIES.find((p) => p.code.toUpperCase() === code);
         if (found) {
           setSelectedProperty(found);
           setCurrentView('propiedades');
@@ -57,9 +83,10 @@ export function App() {
     handleHash();
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
-  }, []);
+  }, [properties]);
 
   const navigateTo = (view: AppView) => {
+    setIsAdminMode(false);
     setCurrentView(view);
     const hashMapping: Record<AppView, string> = {
       home: '#inicio',
@@ -79,19 +106,28 @@ export function App() {
     navigateTo('propiedades');
   };
 
+  // If in Secret Admin Mode, render the dedicated Admin Dashboard
+  if (isAdminMode) {
+    return (
+      <AdminDashboard
+        onExitAdmin={() => navigateTo('home')}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#080e1b] text-slate-100 font-sans selection:bg-[#dfb86c]/30 selection:text-white relative pb-16 lg:pb-0">
-      {/* 1. Header with Big Logo, 7 Separated Section Links & Drawer */}
+      {/* 1. Header with Big Logo, Navigation Links & Drawer (No admin link) */}
       <Navbar currentView={currentView} onNavigate={navigateTo} />
 
-      {/* 2. DYNAMIC SEPARATED SECTIONS (NO TODO EN EL INICIO) */}
+      {/* 2. DYNAMIC SEPARATED SECTIONS */}
       <main>
         {currentView === 'home' && (
           <HomeView
             onNavigate={navigateTo}
             onSearch={handleHeroSearch}
             onSelectProperty={(prop) => setSelectedProperty(prop)}
-            featuredProperties={PROPERTIES}
+            featuredProperties={properties}
           />
         )}
 
@@ -99,6 +135,7 @@ export function App() {
           <PropertiesView
             onSelectProperty={(prop) => setSelectedProperty(prop)}
             initialFilters={searchFilters}
+            properties={properties}
           />
         )}
 
@@ -113,7 +150,7 @@ export function App() {
         {currentView === 'contacto' && <ContactView />}
       </main>
 
-      {/* 3. Footer with All Section Links & Brand Data */}
+      {/* 3. Footer with Section Links & Brand Data */}
       <FooterPropper onNavigate={navigateTo} />
 
       {/* 4. High Conversion Property Detail Modal with Print/PDF, WhatsApp & Share */}

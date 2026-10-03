@@ -1,17 +1,35 @@
 import React, { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle2, MessageCircle, Calendar } from 'lucide-react';
+import { sendContactMessage } from '../services/pocketbase';
 
 export const ContactView: React.FC = () => {
   const [form, setForm] = useState({ name: '', email: '', phone: '', comuna: '', message: '' });
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
-    setTimeout(() => {
-      setSent(false);
-      setForm({ name: '', email: '', phone: '', comuna: '', message: '' });
-    }, 5000);
+    setSending(true);
+
+    try {
+      await sendContactMessage({
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        subject: form.comuna ? `Contacto desde comuna ${form.comuna}` : 'Consulta General Web',
+        message: form.message,
+        source: 'contact_form',
+      });
+    } catch (err) {
+      console.error('Error sending message:', err);
+    } finally {
+      setSending(false);
+      setSent(true);
+      setTimeout(() => {
+        setSent(false);
+        setForm({ name: '', email: '', phone: '', comuna: '', message: '' });
+      }, 6000);
+    }
   };
 
   const whatsappMessage = encodeURIComponent(

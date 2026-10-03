@@ -8,7 +8,7 @@ import { PublishWithUsView } from './components/PublishWithUsView';
 import { AboutView } from './components/AboutView';
 import { ContactView } from './components/ContactView';
 import { FooterPropper } from './components/FooterPropper';
-import { PropertyDetailModal } from './components/PropertyDetailModal';
+import { PropertyDetailView } from './components/PropertyDetailView';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { MobileAppTabBar } from './components/MobileAppTabBar';
 import { AdminDashboard } from './components/admin/AdminDashboard';
@@ -49,19 +49,26 @@ export function App() {
       // Secret Admin URL handler (#admin)
       if (hash === '#admin' || hash.startsWith('#admin')) {
         setIsAdminMode(true);
+        setSelectedProperty(null);
         return;
       }
       setIsAdminMode(false);
 
+      // Property full-page detail view handler (#propiedad-...)
       if (hash.startsWith('#propiedad-')) {
         const code = hash.replace('#propiedad-', '').toUpperCase();
-        const found = properties.find((p) => p.code.toUpperCase() === code) || PROPERTIES.find((p) => p.code.toUpperCase() === code);
+        const found =
+          properties.find((p) => p.code.toUpperCase() === code) ||
+          PROPERTIES.find((p) => p.code.toUpperCase() === code);
         if (found) {
           setSelectedProperty(found);
-          setCurrentView('propiedades');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
           return;
         }
       }
+
+      // If hash is not a property detail, clear selected property
+      setSelectedProperty(null);
 
       if (hash.includes('propiedad')) {
         setCurrentView('propiedades');
@@ -87,6 +94,7 @@ export function App() {
 
   const navigateTo = (view: AppView) => {
     setIsAdminMode(false);
+    setSelectedProperty(null);
     setCurrentView(view);
     const hashMapping: Record<AppView, string> = {
       home: '#inicio',
@@ -99,6 +107,17 @@ export function App() {
     };
     window.history.pushState(null, '', hashMapping[view]);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSelectProperty = (prop: Property) => {
+    setSelectedProperty(prop);
+    window.history.pushState(null, '', `#propiedad-${prop.code.toLowerCase()}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleBackFromProperty = () => {
+    setSelectedProperty(null);
+    navigateTo('propiedades');
   };
 
   const handleHeroSearch = (filters: { operation: string; propertyType: string; comuna: string }) => {
@@ -120,49 +139,54 @@ export function App() {
       {/* 1. Header with Big Logo, Navigation Links & Drawer (No admin link) */}
       <Navbar currentView={currentView} onNavigate={navigateTo} />
 
-      {/* 2. DYNAMIC SEPARATED SECTIONS */}
+      {/* 2. DYNAMIC FULL-PAGE VIEWS (No popups) */}
       <main>
-        {currentView === 'home' && (
-          <HomeView
-            onNavigate={navigateTo}
-            onSearch={handleHeroSearch}
-            onSelectProperty={(prop) => setSelectedProperty(prop)}
-            featuredProperties={properties}
+        {selectedProperty ? (
+          <PropertyDetailView
+            property={selectedProperty}
+            allProperties={properties}
+            onBack={handleBackFromProperty}
+            onSelectProperty={handleSelectProperty}
           />
+        ) : (
+          <>
+            {currentView === 'home' && (
+              <HomeView
+                onNavigate={navigateTo}
+                onSearch={handleHeroSearch}
+                onSelectProperty={handleSelectProperty}
+                featuredProperties={properties}
+              />
+            )}
+
+            {currentView === 'propiedades' && (
+              <PropertiesView
+                onSelectProperty={handleSelectProperty}
+                initialFilters={searchFilters}
+                properties={properties}
+              />
+            )}
+
+            {currentView === 'construccion' && <ConstructionView />}
+
+            {currentView === 'servicios' && <SpecializedServicesView />}
+
+            {currentView === 'publica' && <PublishWithUsView />}
+
+            {currentView === 'nosotros' && <AboutView />}
+
+            {currentView === 'contacto' && <ContactView />}
+          </>
         )}
-
-        {currentView === 'propiedades' && (
-          <PropertiesView
-            onSelectProperty={(prop) => setSelectedProperty(prop)}
-            initialFilters={searchFilters}
-            properties={properties}
-          />
-        )}
-
-        {currentView === 'construccion' && <ConstructionView />}
-
-        {currentView === 'servicios' && <SpecializedServicesView />}
-
-        {currentView === 'publica' && <PublishWithUsView />}
-
-        {currentView === 'nosotros' && <AboutView />}
-
-        {currentView === 'contacto' && <ContactView />}
       </main>
 
       {/* 3. Footer with Section Links & Brand Data */}
       <FooterPropper onNavigate={navigateTo} />
 
-      {/* 4. High Conversion Property Detail Modal with Print/PDF, WhatsApp & Share */}
-      <PropertyDetailModal
-        property={selectedProperty}
-        onClose={() => setSelectedProperty(null)}
-      />
-
-      {/* 5. Persistent Floating WhatsApp Button */}
+      {/* 4. Persistent Floating WhatsApp Button */}
       <FloatingWhatsApp />
 
-      {/* 6. Native-like Mobile Bottom Navigation App Bar */}
+      {/* 5. Native-like Mobile Bottom Navigation App Bar */}
       <MobileAppTabBar currentView={currentView} onNavigate={navigateTo} />
     </div>
   );

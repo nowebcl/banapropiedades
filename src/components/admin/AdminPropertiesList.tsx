@@ -218,6 +218,17 @@ export const AdminPropertiesList: React.FC<AdminPropertiesListProps> = ({
                   <Star className={`w-4 h-4 ${property.featured ? 'fill-[#dfb86c]' : ''}`} />
                 </button>
 
+                {/* View on Web */}
+                <a
+                  href={`/#propiedad-${property.code.toLowerCase()}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Ver página completa en la web"
+                  className="p-2 rounded-xl border border-white/10 hover:border-[#dfb86c]/60 hover:bg-white/5 text-slate-400 hover:text-[#dfb86c] transition-colors cursor-pointer"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+
                 {/* Edit Button (Opens full-page form) */}
                 <button
                   type="button"

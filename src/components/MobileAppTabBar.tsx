@@ -1,85 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import { Home, Building2, Sparkles, Image as ImageIcon, MessageCircle } from 'lucide-react';
+import React from 'react';
+import { Home, Building2, Hammer, MessageCircle, Menu, Scale, UserCheck } from 'lucide-react';
+import { AppView } from './Navbar';
 
 interface MobileAppTabBarProps {
-  currentView?: 'home' | 'remodeling';
-  onNavigate?: (view: 'home' | 'remodeling') => void;
+  currentView: AppView;
+  onNavigate: (view: AppView) => void;
 }
 
-export const MobileAppTabBar: React.FC<MobileAppTabBarProps> = ({ currentView = 'home', onNavigate }) => {
-  const [activeTab, setActiveTab] = useState<'home' | 'properties' | 'remodeling' | 'gallery'>('home');
-
-  useEffect(() => {
-    if (currentView === 'remodeling') {
-      setActiveTab('remodeling');
-      return;
-    }
-
-    const handleScroll = () => {
-      const scrollPos = window.scrollY + 250;
-      const galleryEl = document.getElementById('gallery');
-      const propertiesEl = document.getElementById('propiedades');
-
-      if (galleryEl && scrollPos >= galleryEl.offsetTop) {
-        setActiveTab('gallery');
-      } else if (propertiesEl && scrollPos >= propertiesEl.offsetTop) {
-        setActiveTab('properties');
-      } else {
-        setActiveTab('home');
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [currentView]);
-
-  const handleTabClick = (tab: 'home' | 'properties' | 'remodeling' | 'gallery', hash?: string) => {
-    setActiveTab(tab);
-    if (tab === 'remodeling') {
-      if (onNavigate) onNavigate('remodeling');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      if (onNavigate) onNavigate('home');
-      if (hash) {
-        setTimeout(() => {
-          const el = document.querySelector(hash);
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }, 50);
-      }
-    }
-  };
-
+export const MobileAppTabBar: React.FC<MobileAppTabBarProps> = ({ currentView, onNavigate }) => {
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#070d1a]/95 backdrop-blur-xl border-t border-white/10 px-2 py-2 shadow-2xl shadow-black max-w-full">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#070d1a]/95 backdrop-blur-xl border-t border-white/10 px-2 py-1.5 shadow-2xl shadow-black max-w-full no-print">
       <div className="max-w-md mx-auto flex items-center justify-between">
         {/* Tab 1: Inicio */}
         <button
-          onClick={() => handleTabClick('home', '#page-top')}
-          className={`flex flex-col items-center justify-center flex-1 py-1 transition-all text-center ${
-            currentView === 'home' && activeTab === 'home'
+          onClick={() => onNavigate('home')}
+          className={`flex flex-col items-center justify-center flex-1 py-1 transition-all text-center cursor-pointer ${
+            currentView === 'home'
               ? 'text-[#dfb86c] scale-105 font-bold'
               : 'text-slate-400 hover:text-white'
           }`}
         >
-          <Home className="w-5 h-5 mb-1" />
-          <span className="text-[10px] tracking-tight font-medium">Inicio</span>
+          <Home className="w-4 h-4 mb-0.5" />
+          <span className="text-[10px] tracking-tight">Inicio</span>
         </button>
 
         {/* Tab 2: Propiedades */}
         <button
-          onClick={() => handleTabClick('properties', '#propiedades')}
-          className={`flex flex-col items-center justify-center flex-1 py-1 transition-all text-center ${
-            currentView === 'home' && activeTab === 'properties'
+          onClick={() => onNavigate('propiedades')}
+          className={`flex flex-col items-center justify-center flex-1 py-1 transition-all text-center cursor-pointer ${
+            currentView === 'propiedades'
               ? 'text-[#dfb86c] scale-105 font-bold'
               : 'text-slate-400 hover:text-white'
           }`}
         >
-          <Building2 className="w-5 h-5 mb-1" />
-          <span className="text-[10px] tracking-tight font-medium">Propiedades</span>
+          <Building2 className="w-4 h-4 mb-0.5" />
+          <span className="text-[10px] tracking-tight">Propiedades</span>
         </button>
 
         {/* Center Floating Action WhatsApp Button */}
-        <div className="relative -top-4 px-1 shrink-0">
+        <div className="relative -top-3 px-1 shrink-0">
           <a
             href="https://wa.me/56923807285?text=Hola%20BANÁ%20Propiedades,%20deseo%20hacer%20una%20consulta."
             target="_blank"
@@ -91,33 +50,30 @@ export const MobileAppTabBar: React.FC<MobileAppTabBarProps> = ({ currentView = 
           </a>
         </div>
 
-        {/* Tab 3: Remodelaciones (NEW) */}
+        {/* Tab 3: Construcción */}
         <button
-          onClick={() => handleTabClick('remodeling')}
-          className={`flex flex-col items-center justify-center flex-1 py-1 transition-all text-center relative ${
-            currentView === 'remodeling'
+          onClick={() => onNavigate('construccion')}
+          className={`flex flex-col items-center justify-center flex-1 py-1 transition-all text-center cursor-pointer relative ${
+            currentView === 'construccion'
               ? 'text-[#dfb86c] scale-105 font-bold'
               : 'text-slate-400 hover:text-[#dfb86c]'
           }`}
         >
-          <div className="relative">
-            <Sparkles className="w-5 h-5 mb-1 text-[#dfb86c]" />
-            <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#dfb86c] animate-pulse" />
-          </div>
-          <span className="text-[10px] tracking-tight font-medium">Remodelar</span>
+          <Hammer className="w-4 h-4 mb-0.5" />
+          <span className="text-[10px] tracking-tight">Construcción</span>
         </button>
 
-        {/* Tab 4: Galería */}
+        {/* Tab 4: Servicios */}
         <button
-          onClick={() => handleTabClick('gallery', '#gallery')}
-          className={`flex flex-col items-center justify-center flex-1 py-1 transition-all text-center ${
-            currentView === 'home' && activeTab === 'gallery'
+          onClick={() => onNavigate('servicios')}
+          className={`flex flex-col items-center justify-center flex-1 py-1 transition-all text-center cursor-pointer ${
+            currentView === 'servicios'
               ? 'text-[#dfb86c] scale-105 font-bold'
               : 'text-slate-400 hover:text-white'
           }`}
         >
-          <ImageIcon className="w-5 h-5 mb-1" />
-          <span className="text-[10px] tracking-tight font-medium">Galería</span>
+          <Scale className="w-4 h-4 mb-0.5" />
+          <span className="text-[10px] tracking-tight">Servicios</span>
         </button>
       </div>
     </div>

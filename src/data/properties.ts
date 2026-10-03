@@ -10,7 +10,8 @@ export interface Property {
   sector: string;
   addressApprox: string;
   operation: 'Venta' | 'Arriendo' | 'Inversion';
-  propertyType: 'Casa' | 'Penthouse' | 'Departamento' | 'Villa';
+  propertyType: 'Casa' | 'Penthouse' | 'Departamento' | 'Villa' | 'Parcela' | 'Terreno' | 'Local Comercial';
+  condition?: 'Nueva' | 'Usada';
   priceUF: number;
   priceCLP: number;
   featured: boolean;
@@ -523,12 +524,180 @@ export const PROPERTIES: Property[] = [
       email: 'matias@banapropiedades.cl',
       avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80'
     }
+  },
+  {
+    id: 'prop-07',
+    code: 'BANA-PAR-101',
+    title: 'Parcela de Agrado Valle Escondido',
+    slug: 'parcela-agrado-valle-escondido-chicureo',
+    tagline: '5.000 m² planos con rol propio, empalme de agua potable y luz soterrada',
+    region: 'RM',
+    regionName: 'Región Metropolitana',
+    comuna: 'Chicureo',
+    sector: 'Chamisero / Piedra Roja',
+    addressApprox: 'Camino Chicureo, Colina',
+    operation: 'Venta',
+    propertyType: 'Parcela',
+    condition: 'Nueva',
+    priceUF: 8900,
+    priceCLP: 8900 * UF_VALUE,
+    featured: true,
+    badge: 'OPORTUNIDAD',
+    bedrooms: 0,
+    bathrooms: 0,
+    parking: 4,
+    storage: 0,
+    surfaceUseful: 0,
+    surfaceTotal: 5000,
+    surfaceLand: 5000,
+    coordinates: {
+      lat: '-33.2847° S',
+      lng: '-70.6841° W',
+    },
+    images: [
+      'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=1600&q=80'
+    ],
+    description: 'Extraordinaria parcela de agrado de 5.000 m² 100% plana en condominio cerrado con seguridad 24/7. Cuenta con rol individual, factibilidad aprobada e instalación de agua y electricidad. Ideal para proyecto de vivienda llave en mano con LCE Construcciones.',
+    highlights: [
+      'Terreno 100% plano sin pendientes complejas',
+      'Rol propio listo para escriturar inmediatamente',
+      'Alianza LCE Construcciones para diseño de casa a medida',
+      'Excelente conectividad por autopista Nororiente a Vitacura en 15 min'
+    ],
+    amenities: [
+      'Condominio Cerrado',
+      'Seguridad 24/7',
+      'Agua Potable',
+      'Luz Soterrada',
+      'Caminos Asfaltados',
+      'Portón Eléctrico'
+    ],
+    orientation: 'Nor-Oriente',
+    agent: {
+      name: 'Giovanna González',
+      role: 'Directora Fundadora',
+      phone: '+56 9 2380 7285',
+      email: 'giovanna@banapropiedades.cl',
+      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80'
+    }
+  },
+  {
+    id: 'prop-08',
+    code: 'BANA-TER-204',
+    title: 'Terreno Vista Panorámica Maitencillo',
+    slug: 'terreno-vista-panoramica-maitencillo',
+    tagline: '1.200 m² urbanizados con vista despejada al mar y lomaje suave',
+    region: 'V_REGION',
+    regionName: 'Quinta Región',
+    comuna: 'Maitencillo',
+    sector: 'Cerro Tacna / Maitencillo Norte',
+    addressApprox: 'Camino Cerro Tacna, Puchuncaví',
+    operation: 'Venta',
+    propertyType: 'Terreno',
+    condition: 'Nueva',
+    priceUF: 6200,
+    priceCLP: 6200 * UF_VALUE,
+    featured: false,
+    badge: 'VISTA AL MAR',
+    bedrooms: 0,
+    bathrooms: 0,
+    parking: 2,
+    storage: 0,
+    surfaceUseful: 0,
+    surfaceTotal: 1200,
+    surfaceLand: 1200,
+    coordinates: {
+      lat: '-32.6512° S',
+      lng: '-71.4328° W',
+    },
+    images: [
+      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&w=1600&q=80'
+    ],
+    description: 'Terreno residencial de 1.200 m² con vista privilegiada al océano y puesta de sol. Urbanización completa, empalme de agua potable rural y energía eléctrica. Factibilidad técnica verificada por equipo LCE Construcciones para desarrollo arquitectónico costero.',
+    highlights: [
+      'Vista garantizada al mar sin riesgo de bloqueo futuro',
+      'Topografía de pendiente suave ideal para terraza voladiza',
+      'Suelo certificado para edificación habitacional',
+      'A 4 minutos de Playa El Abanico y comercios'
+    ],
+    amenities: [
+      'Vista al Mar',
+      'Agua Potable Rural',
+      'Luz Eléctrica',
+      'Rol Propio',
+      'Acceso Pavimentado'
+    ],
+    orientation: 'Poniente',
+    agent: {
+      name: 'Matías Baná Larraín',
+      role: 'Socio Director V Región',
+      phone: '+56 9 9123 4872',
+      email: 'matias@banapropiedades.cl',
+      avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80'
+    }
+  },
+  {
+    id: 'prop-09',
+    code: 'BANA-LOC-305',
+    title: 'Local Comercial Corporativo Providencia',
+    slug: 'local-comercial-corporativo-providencia',
+    tagline: 'Planta libre de 180 m² con vitrina a calle y estacionamientos para clientes',
+    region: 'RM',
+    regionName: 'Región Metropolitana',
+    comuna: 'Providencia',
+    sector: 'Metro Tobalaba / Holanda',
+    addressApprox: 'Av. Providencia, Providencia',
+    operation: 'Arriendo',
+    propertyType: 'Local Comercial',
+    condition: 'Usada',
+    priceUF: 140,
+    priceCLP: 140 * UF_VALUE,
+    featured: false,
+    badge: 'ARRIENDO COMERCIAL',
+    bedrooms: 0,
+    bathrooms: 2,
+    parking: 3,
+    storage: 1,
+    surfaceUseful: 180,
+    surfaceTotal: 180,
+    coordinates: {
+      lat: '-33.4215° S',
+      lng: '-70.6032° W',
+    },
+    images: [
+      'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1600&q=80'
+    ],
+    description: 'Impecable local comercial u oficina de atención a público en estratégico punto de alto flujo peatonal y vehicular de Providencia. Frente vidriado con cortinas metálicas automatizadas, climatización central inverter y 3 estacionamientos exclusivos.',
+    highlights: [
+      'Ubicación neurálgica a pasos de Metro Tobalaba',
+      'Excelente exposición de marca con 12 metros de frente vidriado',
+      'Apto para servicios financieros, consultas médicas, showroom o gastronomía sin humo'
+    ],
+    amenities: [
+      'Vitrina a la Calle',
+      'Climatización Central',
+      'Estacionamiento Clientes',
+      'Red de Datos',
+      'Seguridad'
+    ],
+    orientation: 'Norte',
+    agent: {
+      name: 'Camila Montes Baná',
+      role: 'Directora Asociada RM',
+      phone: '+56 9 8452 9100',
+      email: 'camila@banapropiedades.cl',
+      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80'
+    }
   }
 ];
 
 export const REGIONS = [
   { id: 'ALL', name: 'Todas las Regiones' },
-  { id: 'RM', name: 'Región Metropolitana', comunas: ['Vitacura', 'Las Condes', 'Lo Barnechea', 'Providencia', 'La Reina'] },
+  { id: 'RM', name: 'Región Metropolitana', comunas: ['Vitacura', 'Las Condes', 'Lo Barnechea', 'Providencia', 'Chicureo', 'La Reina'] },
   { id: 'V_REGION', name: 'Quinta Región Costa', comunas: ['Zapallar', 'Cachagua', 'Maitencillo', 'Concón', 'Viña del Mar', 'Reñaca'] }
 ];
 
@@ -538,6 +707,7 @@ export const COMUNAS = [
   'Las Condes',
   'Lo Barnechea',
   'Providencia',
+  'Chicureo',
   'Zapallar',
   'Cachagua',
   'Maitencillo',
@@ -545,4 +715,5 @@ export const COMUNAS = [
   'Viña del Mar'
 ];
 
-export const PROPERTY_TYPES = ['Todos los tipos', 'Penthouse', 'Casa', 'Departamento', 'Villa'];
+export const PROPERTY_TYPES = ['Todos los tipos', 'Casas', 'Parcelas', 'Terrenos', 'Departamentos', 'Locales Comerciales'];
+export const PROPERTY_CONDITIONS = ['Todas', 'Nueva', 'Usada'];

@@ -1,113 +1,131 @@
 import React, { useState, useEffect } from 'react';
-import { Navbar } from './components/Navbar';
-import { Hero } from './components/Hero';
-import { PropertiesSection } from './components/PropertiesSection';
-import { FeaturesBlock } from './components/FeaturesBlock';
-import { AboutSection } from './components/AboutSection';
-import { StagesSection } from './components/StagesSection';
-import { BigGallery } from './components/BigGallery';
-import { FaqSection } from './components/FaqSection';
-import { TestimonialsPropper } from './components/TestimonialsPropper';
-import { ContactSection } from './components/ContactSection';
-import { LogosSection } from './components/LogosSection';
-import { BonusNumbers } from './components/BonusNumbers';
+import { Navbar, AppView } from './components/Navbar';
+import { HomeView } from './components/HomeView';
+import { PropertiesView } from './components/PropertiesView';
+import { ConstructionView } from './components/ConstructionView';
+import { SpecializedServicesView } from './components/SpecializedServicesView';
+import { PublishWithUsView } from './components/PublishWithUsView';
+import { AboutView } from './components/AboutView';
+import { ContactView } from './components/ContactView';
 import { FooterPropper } from './components/FooterPropper';
-import { FloorPlanModal } from './components/FloorPlanModal';
+import { PropertyDetailModal } from './components/PropertyDetailModal';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { MobileAppTabBar } from './components/MobileAppTabBar';
-import { RemodelingPage } from './components/RemodelingPage';
-import { Property } from './data/properties';
+import { Property, PROPERTIES } from './data/properties';
 
 export function App() {
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
-  const [currentView, setCurrentView] = useState<'home' | 'remodeling'>('home');
+  const [currentView, setCurrentView] = useState<AppView>('home');
+  const [searchFilters, setSearchFilters] = useState<{
+    operation?: string;
+    propertyType?: string;
+    comuna?: string;
+  }>({});
 
-  // Handle hash changes (e.g. #remodelaciones or back/forward buttons)
+  // Sync state with URL hash
   useEffect(() => {
-    const handleHashChange = () => {
+    const handleHash = () => {
       const hash = window.location.hash.toLowerCase();
-      if (hash.includes('remodelacion') || hash.includes('antes-y-despues')) {
-        setCurrentView('remodeling');
+
+      if (hash.startsWith('#propiedad-')) {
+        const code = hash.replace('#propiedad-', '').toUpperCase();
+        const found = PROPERTIES.find((p) => p.code.toUpperCase() === code);
+        if (found) {
+          setSelectedProperty(found);
+          setCurrentView('propiedades');
+          return;
+        }
+      }
+
+      if (hash.includes('propiedad')) {
+        setCurrentView('propiedades');
+      } else if (hash.includes('construccion') || hash.includes('remodelacion') || hash.includes('antes-y-despues')) {
+        setCurrentView('construccion');
+      } else if (hash.includes('servicio') || hash.includes('tasacion') || hash.includes('posesion')) {
+        setCurrentView('servicios');
+      } else if (hash.includes('publica')) {
+        setCurrentView('publica');
+      } else if (hash.includes('nosotros') || hash.includes('giovanna')) {
+        setCurrentView('nosotros');
+      } else if (hash.includes('contacto')) {
+        setCurrentView('contacto');
+      } else {
+        setCurrentView('home');
       }
     };
 
-    handleHashChange();
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
   }, []);
 
-  const navigateTo = (view: 'home' | 'remodeling') => {
+  const navigateTo = (view: AppView) => {
     setCurrentView(view);
-    if (view === 'remodeling') {
-      window.history.pushState(null, '', '#remodelaciones');
-    } else {
-      window.history.pushState(null, '', '#page-top');
-    }
+    const hashMapping: Record<AppView, string> = {
+      home: '#inicio',
+      propiedades: '#propiedades',
+      construccion: '#construccion',
+      servicios: '#servicios',
+      publica: '#publica',
+      nosotros: '#nosotros',
+      contacto: '#contacto',
+    };
+    window.history.pushState(null, '', hashMapping[view]);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleHeroSearch = (filters: { operation: string; propertyType: string; comuna: string }) => {
+    setSearchFilters(filters);
+    navigateTo('propiedades');
   };
 
   return (
     <div className="min-h-screen bg-[#080e1b] text-slate-100 font-sans selection:bg-[#dfb86c]/30 selection:text-white relative pb-16 lg:pb-0">
-      {/* 1. Header with Big Logo, Remodeling Quick Link & Staggered Hamburger Menu */}
+      {/* 1. Header with Big Logo, 7 Separated Section Links & Drawer */}
       <Navbar currentView={currentView} onNavigate={navigateTo} />
 
-      {/* Dynamic View Switcher */}
-      {currentView === 'remodeling' ? (
-        /* DEDICATED FULL REMODELING PAGE WITH BEFORE/AFTER DYNAMIC CURTAIN & SLIDER */
-        <RemodelingPage onBackToHome={() => navigateTo('home')} />
-      ) : (
-        /* MAIN REAL ESTATE CATALOG & CORPORATE EXPERIENCE */
-        <>
-          {/* 2. Hero Slideshow with Lead Form */}
-          <Hero onOpenRemodeling={() => navigateTo('remodeling')} />
+      {/* 2. DYNAMIC SEPARATED SECTIONS (NO TODO EN EL INICIO) */}
+      <main>
+        {currentView === 'home' && (
+          <HomeView
+            onNavigate={navigateTo}
+            onSearch={handleHeroSearch}
+            onSelectProperty={(prop) => setSelectedProperty(prop)}
+            featuredProperties={PROPERTIES}
+          />
+        )}
 
-          {/* 3. Properties Catalog */}
-          <PropertiesSection onSelectProperty={(prop) => setSelectedProperty(prop)} />
+        {currentView === 'propiedades' && (
+          <PropertiesView
+            onSelectProperty={(prop) => setSelectedProperty(prop)}
+            initialFilters={searchFilters}
+          />
+        )}
 
-          {/* 4. Features Block with Remodeling Spotlight */}
-          <FeaturesBlock onOpenRemodeling={() => navigateTo('remodeling')} />
+        {currentView === 'construccion' && <ConstructionView />}
 
-          {/* 5. About Section (Checkmarks & Video Presentation Box) */}
-          <AboutSection />
+        {currentView === 'servicios' && <SpecializedServicesView />}
 
-          {/* 6. 4 Project Stages Timeline */}
-          <StagesSection />
+        {currentView === 'publica' && <PublishWithUsView />}
 
-          {/* 7. Big Gallery Slider */}
-          <BigGallery />
+        {currentView === 'nosotros' && <AboutView />}
 
-          {/* 8. FAQ Accordion & Framed Newsletter Box */}
-          <FaqSection />
+        {currentView === 'contacto' && <ContactView />}
+      </main>
 
-          {/* 9. Testimonials Quote Slider */}
-          <TestimonialsPropper />
+      {/* 3. Footer with All Section Links & Brand Data */}
+      <FooterPropper onNavigate={navigateTo} />
 
-          {/* 10. Contact & Map Section */}
-          <ContactSection />
-
-          {/* 11. Partners & Institutional Logos */}
-          <LogosSection />
-
-          {/* 12. Bonus Numbers / Key Stats */}
-          <BonusNumbers />
-        </>
-      )}
-
-      {/* 13. Footer with Scroll To Top & Remodeling Link */}
-      <FooterPropper onOpenRemodeling={() => navigateTo('remodeling')} />
-
-      {/* Floor Plan & Apartment Detail Modal */}
-      <FloorPlanModal
+      {/* 4. High Conversion Property Detail Modal with Print/PDF, WhatsApp & Share */}
+      <PropertyDetailModal
         property={selectedProperty}
         onClose={() => setSelectedProperty(null)}
       />
 
-      {/* Desktop Floating WhatsApp Button */}
-      <div className="hidden lg:block">
-        <FloatingWhatsApp />
-      </div>
+      {/* 5. Persistent Floating WhatsApp Button */}
+      <FloatingWhatsApp />
 
-      {/* Native-like Mobile Bottom Navigation App Bar */}
+      {/* 6. Native-like Mobile Bottom Navigation App Bar */}
       <MobileAppTabBar currentView={currentView} onNavigate={navigateTo} />
     </div>
   );

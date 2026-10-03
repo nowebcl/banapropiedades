@@ -34,7 +34,7 @@ export default {
       fontFamily: {
         sans: ['"Montserrat"', 'system-ui', '-apple-system', 'sans-serif'],
         heading: ['"Montserrat"', 'sans-serif'],
-        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+        serif: ['"Cormorant Garamond"', '"Playfair Display"', 'Georgia', 'serif'],
         mono: ['"JetBrains Mono"', 'monospace'],
       },
     },

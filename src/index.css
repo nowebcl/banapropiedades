@@ -121,3 +121,72 @@
   color: #dfb86c;
   font-weight: bold;
 }
+
+/* =========================================================
+   Print Stylesheet for Printable Property Brochure (PDF/A4)
+   ========================================================= */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm;
+  }
+
+  body, html {
+    background: #ffffff !important;
+    color: #111827 !important;
+    font-size: 11pt !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide interactive, layout & non-printable elements */
+  header,
+  footer,
+  nav,
+  .no-print,
+  #page-footer,
+  .floating-whatsapp,
+  button,
+  .fixed:not(.printable-modal-container) {
+    display: none !important;
+  }
+
+  /* Printable brochure container */
+  .printable-property-sheet {
+    display: block !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-height: none !important;
+    height: auto !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    page-break-after: avoid;
+  }
+
+  .printable-property-sheet * {
+    color: #111827 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-color: #d1d5db !important;
+    text-shadow: none !important;
+  }
+
+  .print-gold-text {
+    color: #9a7322 !important;
+    font-weight: bold !important;
+  }
+
+  .print-border-gold {
+    border-color: #9a7322 !important;
+  }
+
+  .print-banner-logo {
+    display: block !important;
+    filter: invert(1) contrast(200%);
+    max-height: 48px !important;
+  }
+}
+

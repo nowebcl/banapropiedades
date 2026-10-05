@@ -630,7 +630,7 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
             {/* Broker Assigned Card */}
             <div className="p-5 rounded-2xl bg-[#0b1428] border border-white/10 flex items-center gap-4">
               <img
-                src={property.agent?.avatar || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80'}
+                src={property.agent?.avatar || '/giovanna-gonzalez.png'}
                 alt={property.agent?.name || 'Giovanna González'}
                 className="w-14 h-14 rounded-full object-cover border-2 border-[#dfb86c]"
               />

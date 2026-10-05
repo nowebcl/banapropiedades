@@ -28,7 +28,7 @@ export const AboutView: React.FC = () => {
           <div className="lg:col-span-5">
             <div className="relative rounded-2xl overflow-hidden aspect-[4/5] bg-slate-900 border-2 border-[#dfb86c]/40 shadow-2xl group">
               <img
-                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1200&q=85"
+                src="/giovanna-gonzalez.png"
                 alt="Giovanna González - Fundadora y Directora de Baná Propiedades"
                 className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
               />

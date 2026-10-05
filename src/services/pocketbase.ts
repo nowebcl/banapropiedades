@@ -110,7 +110,7 @@ const mapRecordToProperty = (rec: any): Property => {
       role: 'Directora & Broker Senior',
       phone: '+56 9 2380 7285',
       email: 'contacto@banapropiedades.cl',
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80'
+      avatar: '/giovanna-gonzalez.png'
     },
   };
 };
@@ -177,7 +177,7 @@ export const createProperty = async (property: Partial<Property>): Promise<{ suc
         role: 'Directora & Broker Senior',
         phone: '+56 9 2380 7285',
         email: 'contacto@banapropiedades.cl',
-        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80'
+        avatar: '/giovanna-gonzalez.png'
       }
     };
 
@@ -342,3 +342,40 @@ export const deleteMessage = async (id: string): Promise<boolean> => {
     return false;
   }
 };
+
+// -------------------------------------------------------------
+// Media & File Upload
+// -------------------------------------------------------------
+export const uploadMediaFile = async (
+  file: File
+): Promise<{ success: boolean; url?: string; error?: string }> => {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const token = getAdminToken();
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers['Authorization'] = token;
+    }
+
+    const res = await fetch(`${POCKETBASE_URL}/api/collections/media/records`, {
+      method: 'POST',
+      headers,
+      body: formData,
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      const msg = err.data?.file?.message || err.message || 'Error al subir la imagen al servidor.';
+      return { success: false, error: msg };
+    }
+
+    const data = await res.json();
+    const publicUrl = `${POCKETBASE_URL}/api/files/${data.collectionId}/${data.id}/${data.file}`;
+    return { success: true, url: publicUrl };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Error de conexión al subir la imagen.' };
+  }
+};
+

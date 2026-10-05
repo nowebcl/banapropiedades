@@ -129,9 +129,20 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Credits & Copyright */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-500">
-          <div>
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-500">
+          <div className="text-center md:text-left">
             © {new Date().getFullYear()} BANÁ PROPIEDADES SpA. Todos los derechos reservados.
+          </div>
+          <div className="flex items-center gap-1.5 text-center">
+            <span>Desarrollado por</span>
+            <a
+              href="https://www.instagram.com/noweb.dev/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-slate-300 hover:text-[#dfb86c] transition-colors underline decoration-[#dfb86c]/40 underline-offset-4 cursor-pointer"
+            >
+              noweb.dev
+            </a>
           </div>
           <div className="flex items-center gap-6">
             <a href="#" className="hover:text-slate-300 transition-colors">Términos Legales</a>

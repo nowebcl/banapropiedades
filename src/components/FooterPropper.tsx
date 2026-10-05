@@ -152,16 +152,28 @@ export const FooterPropper: React.FC<FooterPropperProps> = ({ onNavigate }) => {
           </div>
         </div>
 
-        {/* Copyright & To Top Button */}
-        <div className="pt-8 border-t border-white/10 flex items-center justify-between text-xs font-mono text-slate-500">
-          <div>
+        {/* Copyright, Developer Signature & To Top Button */}
+        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-500">
+          <div className="text-center md:text-left">
             © {new Date().getFullYear()} BANÁ PROPIEDADES SpA. Todos los derechos reservados.
+          </div>
+
+          <div className="flex items-center gap-1.5 text-center">
+            <span>Desarrollado por</span>
+            <a
+              href="https://www.instagram.com/noweb.dev/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-slate-300 hover:text-[#dfb86c] transition-colors underline decoration-[#dfb86c]/40 underline-offset-4 cursor-pointer"
+            >
+              noweb.dev
+            </a>
           </div>
 
           <button
             onClick={scrollToTop}
             aria-label="Volver arriba"
-            className="w-10 h-10 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-[#c5a059] hover:text-black hover:border-[#dfb86c] transition-all cursor-pointer"
+            className="w-10 h-10 rounded-full border border-white/20 text-white flex items-center justify-center hover:bg-[#c5a059] hover:text-black hover:border-[#dfb86c] transition-all cursor-pointer shrink-0"
           >
             <ArrowUp className="w-4 h-4" />
           </button>

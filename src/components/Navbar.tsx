@@ -71,7 +71,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
             <img
               src="/logo.png"
               alt="BANÁ PROPIEDADES"
-              className="h-9 sm:h-10 md:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]"
+              className={`w-auto object-contain transition-all duration-300 group-hover:scale-105 drop-shadow-[0_4px_16px_rgba(0,0,0,0.7)] ${
+                scrolled
+                  ? 'h-11 sm:h-12 md:h-14'
+                  : 'h-14 sm:h-16 md:h-20'
+              }`}
               onError={(e) => {
                 const target = e.target as HTMLElement;
                 target.style.display = 'none';

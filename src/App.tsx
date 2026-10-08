@@ -14,6 +14,7 @@ import { MobileAppTabBar } from './components/MobileAppTabBar';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { Property, PROPERTIES } from './data/properties';
 import { fetchProperties } from './services/pocketbase';
+import { fetchAllJetProjects } from './services/jetbrokers';
 
 export function App() {
   const [properties, setProperties] = useState<Property[]>(PROPERTIES);
@@ -26,14 +27,28 @@ export function App() {
     comuna?: string;
   }>({});
 
-  // Fetch dynamic properties from PocketBase
+  // Fetch dynamic properties from PocketBase & JetBrokers API
   useEffect(() => {
     const loadDynamicProperties = async () => {
       try {
-        const liveProps = await fetchProperties();
-        if (liveProps && liveProps.length > 0) {
-          setProperties(liveProps);
+        const [liveProps, jetProps] = await Promise.all([
+          fetchProperties().catch(() => []),
+          fetchAllJetProjects().catch(() => []),
+        ]);
+
+        const base = (liveProps && liveProps.length > 0) ? liveProps : PROPERTIES;
+        const combined = [...base];
+
+        if (jetProps && jetProps.length > 0) {
+          jetProps.forEach((jp) => {
+            const exists = combined.some((p) => p.id === jp.id || p.code === jp.code);
+            if (!exists) {
+              combined.unshift(jp);
+            }
+          });
         }
+
+        setProperties(combined);
       } catch (err) {
         console.warn('Using default properties fallback');
       }

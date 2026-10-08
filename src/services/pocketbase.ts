@@ -1,4 +1,5 @@
 import { Property, PROPERTIES } from '../data/properties';
+import { sendLeadToJetBrokers } from './jetbrokers';
 
 export const POCKETBASE_URL = 'https://bana.noweb.cl';
 
@@ -282,6 +283,16 @@ export const sendContactMessage = async (msg: {
       const err = await res.json().catch(() => ({}));
       return { success: false, error: err.message || 'No se pudo registrar el mensaje.' };
     }
+
+    // Despachar en paralelo al CRM de JetBrokers
+    sendLeadToJetBrokers({
+      fullName: msg.name,
+      email: msg.email,
+      mobile: msg.phone,
+      campaign: msg.propertyTitle ? `${msg.propertyTitle} (${msg.propertyCode})` : (msg.subject || 'Web Baná'),
+      comments: msg.message + (msg.propertyCode ? ` [Código: ${msg.propertyCode}]` : ''),
+      origin: 'Sitio Web Baná Propiedades',
+    }).catch((e) => console.warn('JetBrokers lead dispatch error:', e));
 
     return { success: true };
   } catch (err: any) {

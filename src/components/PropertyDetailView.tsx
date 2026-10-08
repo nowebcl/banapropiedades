@@ -22,9 +22,11 @@ import {
   CheckCircle2,
   Layers,
   Compass,
-  DollarSign
+  DollarSign,
+  ExternalLink
 } from 'lucide-react';
 import { Property, UF_VALUE } from '../data/properties';
+import { JETBROKERS_ORG_ID, JETBROKERS_BROKER_ID } from '../services/jetbrokers';
 import { sendContactMessage } from '../services/pocketbase';
 import { PropertyCard } from './PropertyCard';
 
@@ -230,6 +232,19 @@ export const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({
               <MessageCircle className="w-3.5 h-3.5 fill-white" />
               <span>WhatsApp</span>
             </a>
+
+            {property.id.startsWith('jet-') && (
+              <a
+                href={`https://jetgallery.jetbrokers.io/${JETBROKERS_ORG_ID}/${property.id.replace('jet-', '')}/${JETBROKERS_BROKER_ID}/${property.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Ver Ficha Oficial de Inmobiliaria"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold uppercase bg-[#dfb86c]/15 hover:bg-[#dfb86c]/25 text-[#dfb86c] transition-all border border-[#dfb86c]/30 cursor-pointer"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Ficha Inmobiliaria</span>
+              </a>
+            )}
           </div>
         </div>
 
